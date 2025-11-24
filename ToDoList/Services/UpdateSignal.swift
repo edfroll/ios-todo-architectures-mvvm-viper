@@ -1,0 +1,17 @@
+//
+//  UpdateSignal.swift
+//  ToDoList
+//
+//  Created by Эдвард on 24.11.2025.
+//
+
+import Foundation
+import Combine
+
+class UpdateSignal {
+    static let shared = UpdateSignal()
+    
+    private init () {} // private init для Singleton
+    
+    let updatePublisher = PassthroughSubject<Void, Never>()
+}
