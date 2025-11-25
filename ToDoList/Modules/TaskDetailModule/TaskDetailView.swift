@@ -65,8 +65,6 @@ struct TaskDetailView: View {
             }
             .navigationBarBackButtonHidden()
         }
-        
-        
         .scrollDismissesKeyboard(.immediately)
     }
     

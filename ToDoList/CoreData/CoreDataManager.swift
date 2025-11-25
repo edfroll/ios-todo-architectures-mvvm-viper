@@ -11,13 +11,25 @@ class CoreDataManager {
     static let shared = CoreDataManager()
     let container: NSPersistentContainer
     
-    private init() {
+    //Для тестов
+    static func createInMemory() -> CoreDataManager {
+        let manager = CoreDataManager(inMemory: true)
+        return manager
+    }
+    
+    private init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "DataModel")
+        
+        if inMemory {
+            // ✅ Используем in-memory store description для тестов
+            let description = NSPersistentStoreDescription()
+            description.type = NSInMemoryStoreType
+            container.persistentStoreDescriptions = [description]
+        }
+        
         container.loadPersistentStores { description, error in
             if let error = error {
                 fatalError("❌ Ошибка загрузки CoreData: \(error.localizedDescription)")
-            } else {
-                print("✅ Core Data успешно загружена")
             }
         }
         container.viewContext.automaticallyMergesChangesFromParent = true
@@ -29,7 +41,6 @@ class CoreDataManager {
         if context.hasChanges {
             do {
                 try context.save()
-                print("✅ Контекст сохранен")
             } catch {
                 print("❌ Ошибка сохранения контекста")
             }

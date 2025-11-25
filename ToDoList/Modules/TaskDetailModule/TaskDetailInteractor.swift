@@ -10,13 +10,13 @@ import CoreData
 // Бизнес логика для работы с одной задачей
 class TaskDetailInteractor: TaskDetailInteractorProtocol {
     
-    weak var presenter: TaskDetailPresenterProtocol? // решение проблемы retain cycle при сборке
+    weak var presenter: TaskDetailPresenterProtocol?
+    
     private let id: UUID
     
     private var task: DataTask?
-    
-    // ✅ Используем общий контейнер
-    let container: NSPersistentContainer// = CoreDataManager.shared.container
+
+    let container: NSPersistentContainer
     
     init(taskId: UUID, container: NSPersistentContainer) {
         self.id = taskId
@@ -27,12 +27,9 @@ class TaskDetailInteractor: TaskDetailInteractorProtocol {
     /// Главный метод этого интерактора. Без него остальные его методы - не сработают
     func fetchTask() {
         do {
-            
-            if let task = try container.viewContext.fetch(request).first { // может завернуть в DispatchQueue.global.async ?
-                self.task = task
-                DispatchQueue.main.async { [weak self] in
-                    self?.presenter?.didFetchTask(task)
-                }
+            if let task = try container.viewContext.fetch(request).first { // простой fetch - background thread не нужен
+                self.task = task // добавляем кеш
+                presenter?.didFetchTask(task) // главный поток ✅
             }
             
         } catch {
@@ -52,7 +49,6 @@ class TaskDetailInteractor: TaskDetailInteractorProtocol {
         }
         
         task.date = Date.now
-        print("Задача обновлена.")
         presenter?.didChangeTask() // ✅ Единый сигнал обновления
         
     }
@@ -60,7 +56,6 @@ class TaskDetailInteractor: TaskDetailInteractorProtocol {
     func deleteTask() {
         guard let task = task else { return }
         container.viewContext.delete(task)
-        print("Задача удалена.")
         presenter?.didChangeTask() // ✅ Единый сигнал обновления
     }
     

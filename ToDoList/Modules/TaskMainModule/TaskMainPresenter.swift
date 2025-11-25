@@ -27,7 +27,6 @@ class TaskMainPresenter: TaskMainPresenterProtocol, ObservableObject {
         UpdateSignal.shared.updatePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                print("Combine: изменения из DetailModule => Обновляю список :)")
                 self?.interactor.fetchTasks()
             }
             .store(in: &cancellables)
@@ -35,13 +34,11 @@ class TaskMainPresenter: TaskMainPresenterProtocol, ObservableObject {
     
     // MARK: - View Events
     func viewDidLoad() {
-    print("taskMainPresenter.viewDidLoad()")
         interactor.fetchTasks()
         interactor.loadInitialDataIfNeeded()
     }
     
-    func userDidSearch(query: String) {
-        searchText = query
+    func userDidSearch() {
         filterAndShowTasks()
     }
     
@@ -68,11 +65,11 @@ class TaskMainPresenter: TaskMainPresenterProtocol, ObservableObject {
     
     func didFetchTasks(_ tasks: [DataTask]) {
         rawTasks = tasks
-        print("Обновляю главный экран")
-        filterAndShowTasks() // ✅ Единственное место обновления View
+        filterAndShowTasks()
     }
         
     // MARK: - Helpers
+    /// Единственное место обновления TaskMainView
     private func filterAndShowTasks() {
         let filtered = searchText.isEmpty ? rawTasks : rawTasks.filter { task in
             (task.title ?? "").localizedCaseInsensitiveContains(searchText) ||
@@ -81,8 +78,7 @@ class TaskMainPresenter: TaskMainPresenterProtocol, ObservableObject {
         
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
-            print("Преобразую сырые отфильтрованные в TaskDisplayModel")
-            
+
             let filteredForDisplayTasks = filtered.map { task in
                 TaskDisplayModel(
                     id: task.id ?? UUID(),

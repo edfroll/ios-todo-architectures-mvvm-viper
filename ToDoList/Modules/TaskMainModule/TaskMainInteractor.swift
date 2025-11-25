@@ -7,12 +7,9 @@
 import Foundation
 import CoreData
 
-// MARK: - Task Main Interactor
-// Вся бизнес-логика, работа с CoreData, API, вычисления
-
 class TaskMainInteractor: TaskMainInteractorProtocol {
 
-    weak var presenter: TaskMainPresenterProtocol? // решение проблемы retain cycle при сборке
+    weak var presenter: TaskMainPresenterProtocol?
     
     
     private let container: NSPersistentContainer
@@ -33,13 +30,9 @@ class TaskMainInteractor: TaskMainInteractorProtocol {
         ]
         
         do {
-            tasks = try container.viewContext.fetch(request)
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self, let presenter = self.presenter else { return }
-                print("🪬mainPresenter.didFetchTasks")
-                presenter.didFetchTasks(self.tasks)
-            }
+            tasks = try container.viewContext.fetch(request) // простой fetch - background thread не нужен
+                presenter?.didFetchTasks(self.tasks) // главный поток ✅
+
         } catch {
             print("❌ Ошибка чтения данных: \(error.localizedDescription)")
         }
@@ -57,15 +50,13 @@ class TaskMainInteractor: TaskMainInteractorProtocol {
         newTask.isCompleted = false
         
         tasks.append(newTask) // кеш для локальных операций
-        
-        print("TaskMainInteractor.createNewTask")
+   
         return id
     }
     
     // MARK: - Update
     func toggleTaskCompletion(at id: UUID) {
-        guard let task = tasks.first(where: { $0.id == id }) else { print("Не пройден guard") ; return }
-        print("TaskMainInteractor.toggleTaskCompletion")
+        guard let task = tasks.first(where: { $0.id == id }) else { return }
         task.isCompleted.toggle()
         CoreDataManager.shared.saveContext()
         fetchTasks()
@@ -74,7 +65,6 @@ class TaskMainInteractor: TaskMainInteractorProtocol {
     // MARK: - Delete
     func deleteTask(at id: UUID) {
         guard let task = tasks.first(where: { $0.id == id }) else { return }
-        print("TaskMainInteractor.deleteTask")
         container.viewContext.delete(task)
         CoreDataManager.shared.saveContext()
         fetchTasks()

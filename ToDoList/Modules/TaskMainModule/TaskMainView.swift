@@ -30,8 +30,11 @@ struct TaskMainView: View {
                 }
                 .listStyle(.plain)
                 .searchable(text: $vm.searchText, prompt: "Search")
-                .onChange(of: vm.searchText) { newValue, _ in
-                    vm.userDidSearch(query: newValue)
+//                .onChange(of: vm.searchText) { newValue in
+//                    vm.userDidSearch(query: newValue)
+//                }
+                .onChange(of: vm.searchText) {
+                    vm.userDidSearch()
                 }
                 
                 BottomBar(vm: vm)
@@ -97,7 +100,7 @@ struct TaskRow: View {
                         .foregroundStyle(.secondary)
                 }
                 .padding()
-                .background(.ultraThinMaterial) // 🚨 нужен ручной тест
+                .background(.ultraThinMaterial)
                 .frame(maxWidth: UIScreen.main.bounds.width)
             }
         }
@@ -172,7 +175,7 @@ struct BottomBar: View {
         }
         
         .padding(.top)
-        .background(Color.gray.opacity(0.2).ignoresSafeArea(edges: .bottom)) // 🚨 нужен ручной тест
+        .background(Color.gray.opacity(0.2).ignoresSafeArea(edges: .bottom))
     }
 }
 

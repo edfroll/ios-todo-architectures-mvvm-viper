@@ -51,7 +51,6 @@ final class TaskDetailPresenter: TaskDetailPresenterProtocol, ObservableObject {
     
     func userDidTapBack() {
         if title.isEmpty && body.isEmpty {
-            print("Атрибуты пустые, пожалуй удалю задачу..")
             interactor.deleteTask()
             return
         }
@@ -60,7 +59,7 @@ final class TaskDetailPresenter: TaskDetailPresenterProtocol, ObservableObject {
         let bodyChanged = body != displayTask?.body
         
         switch (titleChanged, bodyChanged) {
-        case (false, false): print("Задача не изменилась")
+        case (false, false): break
             
         case (true, true): interactor.updateTask(title, body)
         case (true, false): interactor.updateTask(title, nil)

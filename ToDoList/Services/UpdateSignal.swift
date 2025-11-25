@@ -11,7 +11,7 @@ import Combine
 class UpdateSignal {
     static let shared = UpdateSignal()
     
-    private init () {} // private init для Singleton
+    private init () {}
     
     let updatePublisher = PassthroughSubject<Void, Never>()
 }
