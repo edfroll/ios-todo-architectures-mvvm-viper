@@ -2,8 +2,7 @@
 //  TaskMainView.swift
 //  ToDoList
 //
-//  Created by Эдвард on 25.11.2025.
-//
+//  Created by Эдвард on 18.09.2025.
 import SwiftUI
 
 struct TaskMainView: View {
@@ -178,9 +177,9 @@ struct TaskRow: View {
             }
             .padding(.top, 4)
         }
-        .padding(.vertical) // Важный!
+        .padding(.vertical) 
     }
-} //viewModel.formatter.string(from: task.date)
+}
 #Preview {
     TaskMainView()
 }

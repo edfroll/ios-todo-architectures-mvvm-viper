@@ -2,7 +2,7 @@
 //  JsonViewModel.swift
 //  ToDoList
 //
-//  Created by Эдвард on 25.11.2025.
+//  Created by Эдвард on 22.09.2025.
 //
 import Foundation
 
@@ -11,12 +11,10 @@ class JsonViewModel: ObservableObject {
     @Published var tasks: [ApiModel] = []
 
     init() {
-        fetchTasks {
-            
-        }
+        fetchTasks()
     }
     
-    func fetchTasks(completion: @escaping () -> Void) {
+    func fetchTasks() {
         guard let url = URL(string: "https://dummyjson.com/todos") else { return }
         
         let task = URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
@@ -38,7 +36,6 @@ class JsonViewModel: ObservableObject {
                 let response = try JSONDecoder().decode(ApiResponse.self, from: data)
                 DispatchQueue.main.async {
                     self.tasks = response.todos
-                    completion()
                 }
             } catch {
                 print("Ошибка парсинга: \(error.localizedDescription)")

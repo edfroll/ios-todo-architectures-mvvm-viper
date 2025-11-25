@@ -2,7 +2,7 @@
 //  TaskViewModel.swift
 //  ToDoList
 //
-//  Created by Эдвард on 25.11.2025.
+//  Created by Эдвард on 18.09.2025.
 //
 import SwiftUI
 import CoreData
@@ -10,12 +10,13 @@ import CoreData
 class TaskViewModel: ObservableObject {
     
     let container: NSPersistentContainer
+    @StateObject private var jsonVM = JsonViewModel()
     
     @Published var tasks: [DataTask] = []
     @Published var searchText: String = ""
     
     
-    private var jsonVM = JsonViewModel()
+//    private var jsonVM = JsonViewModel()
     
     init() {
         container = NSPersistentContainer(name: "DataModel")
@@ -42,7 +43,8 @@ class TaskViewModel: ObservableObject {
     
     // MARK: - Network
     func loadTasksFromApi() {
-        jsonVM.fetchTasks { [weak self] in
+        self.tasks = jsonVM.tasks
+//        jsonVM.fetchTasks { [weak self] in
             guard let self = self else { return }
             
             for apiTask in self.jsonVM.tasks {
@@ -118,7 +120,6 @@ class TaskViewModel: ObservableObject {
         task.isCompleted.toggle()
         saveContext()
         fetchData()
-        
     }
 
     // MARK: - Delete
@@ -143,7 +144,7 @@ class TaskViewModel: ObservableObject {
         }
     }
 
-    // MARK: - Сброс и перезагрузка
+    // MARK: - Reset and Reload
     func resetAndReload() {
         for task in tasks {
             container.viewContext.delete(task)
@@ -154,7 +155,7 @@ class TaskViewModel: ObservableObject {
         loadTasksFromApi()
     }
     
-    
+    // MARK: - Formatting
     var filteredTasks: [DataTask] {
         if searchText.isEmpty {
             return tasks
