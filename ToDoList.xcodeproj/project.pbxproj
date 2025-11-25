@@ -10,24 +10,12 @@
 		CC1A2F272ED4B2D200633CAD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC1A2F212ED4B2D200633CAD /* Preview Assets.xcassets */; };
 		CC1A2F282ED4B2D200633CAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC1A2F232ED4B2D200633CAD /* Assets.xcassets */; };
 		CC1A2F2A2ED4B2D200633CAD /* ToDoListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F252ED4B2D200633CAD /* ToDoListApp.swift */; };
-		CC1A2F2C2ED4B2E200633CAD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F2B2ED4B2DD00633CAD /* Extensions.swift */; };
-		CC1A2F402ED4D10B00633CAD /* TaskMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F3F2ED4D10600633CAD /* TaskMainView.swift */; };
-		CC1A2F422ED4D11800633CAD /* TaskMainPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F412ED4D10E00633CAD /* TaskMainPresenter.swift */; };
-		CC1A2F442ED4D12700633CAD /* TaskMainInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F432ED4D11D00633CAD /* TaskMainInteractor.swift */; };
-		CC1A2F462ED4D13400633CAD /* TaskMainRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F452ED4D12B00633CAD /* TaskMainRouter.swift */; };
-		CC1A2F482ED4D13E00633CAD /* TaskMainProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F472ED4D13800633CAD /* TaskMainProtocols.swift */; };
-		CC1A2F4A2ED4D16A00633CAD /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F492ED4D16200633CAD /* TaskDetailView.swift */; };
-		CC1A2F4C2ED4D18F00633CAD /* TaskDetailProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F4B2ED4D17F00633CAD /* TaskDetailProtocols.swift */; };
-		CC1A2F4E2ED4D19D00633CAD /* TaskDetailRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F4D2ED4D19200633CAD /* TaskDetailRouter.swift */; };
-		CC1A2F502ED4D27500633CAD /* TaskDetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F4F2ED4D26900633CAD /* TaskDetailInteractor.swift */; };
-		CC1A2F522ED4D28100633CAD /* TaskDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F512ED4D27C00633CAD /* TaskDetailPresenter.swift */; };
-		CC1A2F562ED4D2B800633CAD /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F552ED4D2B400633CAD /* CoreDataManager.swift */; };
-		CC1A2F5D2ED4DC7D00633CAD /* UpdateSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F5C2ED4DC7600633CAD /* UpdateSignal.swift */; };
-		CC1A2F5F2ED4DC9D00633CAD /* JsonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F5E2ED4DC9700633CAD /* JsonService.swift */; };
-		CC1A2F642ED4DD0F00633CAD /* TaskEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1A2F632ED4DD0B00633CAD /* TaskEntity.swift */; };
-		CCFD004F2ED4E12400A40D46 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CCFD004D2ED4E12400A40D46 /* DataModel.xcdatamodeld */; };
-		CCFD00502ED4E12400A40D46 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CCFD004D2ED4E12400A40D46 /* DataModel.xcdatamodeld */; };
-		CCFD00512ED4E12400A40D46 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CCFD004D2ED4E12400A40D46 /* DataModel.xcdatamodeld */; };
+		CC293F902ED5F1CD002D1FF1 /* TaskMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC293F8F2ED5F1C9002D1FF1 /* TaskMainView.swift */; };
+		CC293F922ED5F1D4002D1FF1 /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC293F912ED5F1D0002D1FF1 /* TaskDetailView.swift */; };
+		CC293F942ED5F204002D1FF1 /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC293F932ED5F1FF002D1FF1 /* TaskViewModel.swift */; };
+		CC293F962ED5F297002D1FF1 /* JsonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC293F952ED5F293002D1FF1 /* JsonViewModel.swift */; };
+		CC293F982ED5F2B8002D1FF1 /* ApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC293F972ED5F2B5002D1FF1 /* ApiModel.swift */; };
+		CC293F9B2ED5F2E1002D1FF1 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CC293F992ED5F2E1002D1FF1 /* DataModel.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,22 +42,12 @@
 		CC1A2F212ED4B2D200633CAD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CC1A2F232ED4B2D200633CAD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC1A2F252ED4B2D200633CAD /* ToDoListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListApp.swift; sourceTree = "<group>"; };
-		CC1A2F2B2ED4B2DD00633CAD /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		CC1A2F3F2ED4D10600633CAD /* TaskMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskMainView.swift; sourceTree = "<group>"; };
-		CC1A2F412ED4D10E00633CAD /* TaskMainPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskMainPresenter.swift; sourceTree = "<group>"; };
-		CC1A2F432ED4D11D00633CAD /* TaskMainInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskMainInteractor.swift; sourceTree = "<group>"; };
-		CC1A2F452ED4D12B00633CAD /* TaskMainRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskMainRouter.swift; sourceTree = "<group>"; };
-		CC1A2F472ED4D13800633CAD /* TaskMainProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskMainProtocols.swift; sourceTree = "<group>"; };
-		CC1A2F492ED4D16200633CAD /* TaskDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailView.swift; sourceTree = "<group>"; };
-		CC1A2F4B2ED4D17F00633CAD /* TaskDetailProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailProtocols.swift; sourceTree = "<group>"; };
-		CC1A2F4D2ED4D19200633CAD /* TaskDetailRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailRouter.swift; sourceTree = "<group>"; };
-		CC1A2F4F2ED4D26900633CAD /* TaskDetailInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailInteractor.swift; sourceTree = "<group>"; };
-		CC1A2F512ED4D27C00633CAD /* TaskDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailPresenter.swift; sourceTree = "<group>"; };
-		CC1A2F552ED4D2B400633CAD /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
-		CC1A2F5C2ED4DC7600633CAD /* UpdateSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSignal.swift; sourceTree = "<group>"; };
-		CC1A2F5E2ED4DC9700633CAD /* JsonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonService.swift; sourceTree = "<group>"; };
-		CC1A2F632ED4DD0B00633CAD /* TaskEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEntity.swift; sourceTree = "<group>"; };
-		CCFD004E2ED4E12400A40D46 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		CC293F8F2ED5F1C9002D1FF1 /* TaskMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskMainView.swift; sourceTree = "<group>"; };
+		CC293F912ED5F1D0002D1FF1 /* TaskDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailView.swift; sourceTree = "<group>"; };
+		CC293F932ED5F1FF002D1FF1 /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
+		CC293F952ED5F293002D1FF1 /* JsonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonViewModel.swift; sourceTree = "<group>"; };
+		CC293F972ED5F2B5002D1FF1 /* ApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiModel.swift; sourceTree = "<group>"; };
+		CC293F9A2ED5F2E1002D1FF1 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -141,11 +119,9 @@
 		CC1A2F262ED4B2D200633CAD /* ToDoList */ = {
 			isa = PBXGroup;
 			children = (
-				CC1A2F2B2ED4B2DD00633CAD /* Extensions.swift */,
-				CC1A2F342ED4B31C00633CAD /* Services */,
-				CC1A2F362ED4B35100633CAD /* CoreData */,
-				CC1A2F2D2ED4B2EA00633CAD /* Entities */,
-				CC1A2F352ED4B32700633CAD /* Modules */,
+				CC293F8E2ED5F17F002D1FF1 /* Views */,
+				CC293F8D2ED5F172002D1FF1 /* ViewModels */,
+				CC293F8C2ED5F16C002D1FF1 /* Models */,
 				CC1A2F252ED4B2D200633CAD /* ToDoListApp.swift */,
 				CC1A2F232ED4B2D200633CAD /* Assets.xcassets */,
 				CC1A2F222ED4B2D200633CAD /* Preview Content */,
@@ -153,63 +129,31 @@
 			path = ToDoList;
 			sourceTree = "<group>";
 		};
-		CC1A2F2D2ED4B2EA00633CAD /* Entities */ = {
+		CC293F8C2ED5F16C002D1FF1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				CC1A2F632ED4DD0B00633CAD /* TaskEntity.swift */,
+				CC293F972ED5F2B5002D1FF1 /* ApiModel.swift */,
+				CC293F992ED5F2E1002D1FF1 /* DataModel.xcdatamodeld */,
 			);
-			path = Entities;
+			path = Models;
 			sourceTree = "<group>";
 		};
-		CC1A2F342ED4B31C00633CAD /* Services */ = {
+		CC293F8D2ED5F172002D1FF1 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				CC1A2F5E2ED4DC9700633CAD /* JsonService.swift */,
-				CC1A2F5C2ED4DC7600633CAD /* UpdateSignal.swift */,
+				CC293F952ED5F293002D1FF1 /* JsonViewModel.swift */,
+				CC293F932ED5F1FF002D1FF1 /* TaskViewModel.swift */,
 			);
-			path = Services;
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		CC1A2F352ED4B32700633CAD /* Modules */ = {
+		CC293F8E2ED5F17F002D1FF1 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				CC1A2F3D2ED4D0E600633CAD /* TaskMainModule */,
-				CC1A2F3E2ED4D0F500633CAD /* TaskDetailModule */,
+				CC293F8F2ED5F1C9002D1FF1 /* TaskMainView.swift */,
+				CC293F912ED5F1D0002D1FF1 /* TaskDetailView.swift */,
 			);
-			path = Modules;
-			sourceTree = "<group>";
-		};
-		CC1A2F362ED4B35100633CAD /* CoreData */ = {
-			isa = PBXGroup;
-			children = (
-				CC1A2F552ED4D2B400633CAD /* CoreDataManager.swift */,
-				CCFD004D2ED4E12400A40D46 /* DataModel.xcdatamodeld */,
-			);
-			path = CoreData;
-			sourceTree = "<group>";
-		};
-		CC1A2F3D2ED4D0E600633CAD /* TaskMainModule */ = {
-			isa = PBXGroup;
-			children = (
-				CC1A2F3F2ED4D10600633CAD /* TaskMainView.swift */,
-				CC1A2F412ED4D10E00633CAD /* TaskMainPresenter.swift */,
-				CC1A2F432ED4D11D00633CAD /* TaskMainInteractor.swift */,
-				CC1A2F452ED4D12B00633CAD /* TaskMainRouter.swift */,
-				CC1A2F472ED4D13800633CAD /* TaskMainProtocols.swift */,
-			);
-			path = TaskMainModule;
-			sourceTree = "<group>";
-		};
-		CC1A2F3E2ED4D0F500633CAD /* TaskDetailModule */ = {
-			isa = PBXGroup;
-			children = (
-				CC1A2F492ED4D16200633CAD /* TaskDetailView.swift */,
-				CC1A2F512ED4D27C00633CAD /* TaskDetailPresenter.swift */,
-				CC1A2F4F2ED4D26900633CAD /* TaskDetailInteractor.swift */,
-				CC1A2F4D2ED4D19200633CAD /* TaskDetailRouter.swift */,
-				CC1A2F4B2ED4D17F00633CAD /* TaskDetailProtocols.swift */,
-			);
-			path = TaskDetailModule;
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -355,23 +299,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC1A2F462ED4D13400633CAD /* TaskMainRouter.swift in Sources */,
-				CC1A2F5F2ED4DC9D00633CAD /* JsonService.swift in Sources */,
-				CC1A2F442ED4D12700633CAD /* TaskMainInteractor.swift in Sources */,
-				CC1A2F422ED4D11800633CAD /* TaskMainPresenter.swift in Sources */,
-				CCFD00502ED4E12400A40D46 /* DataModel.xcdatamodeld in Sources */,
-				CC1A2F4C2ED4D18F00633CAD /* TaskDetailProtocols.swift in Sources */,
-				CC1A2F4E2ED4D19D00633CAD /* TaskDetailRouter.swift in Sources */,
-				CC1A2F402ED4D10B00633CAD /* TaskMainView.swift in Sources */,
-				CC1A2F502ED4D27500633CAD /* TaskDetailInteractor.swift in Sources */,
-				CC1A2F2C2ED4B2E200633CAD /* Extensions.swift in Sources */,
-				CC1A2F522ED4D28100633CAD /* TaskDetailPresenter.swift in Sources */,
+				CC293F902ED5F1CD002D1FF1 /* TaskMainView.swift in Sources */,
+				CC293F942ED5F204002D1FF1 /* TaskViewModel.swift in Sources */,
 				CC1A2F2A2ED4B2D200633CAD /* ToDoListApp.swift in Sources */,
-				CC1A2F482ED4D13E00633CAD /* TaskMainProtocols.swift in Sources */,
-				CC1A2F562ED4D2B800633CAD /* CoreDataManager.swift in Sources */,
-				CC1A2F642ED4DD0F00633CAD /* TaskEntity.swift in Sources */,
-				CC1A2F5D2ED4DC7D00633CAD /* UpdateSignal.swift in Sources */,
-				CC1A2F4A2ED4D16A00633CAD /* TaskDetailView.swift in Sources */,
+				CC293F9B2ED5F2E1002D1FF1 /* DataModel.xcdatamodeld in Sources */,
+				CC293F962ED5F297002D1FF1 /* JsonViewModel.swift in Sources */,
+				CC293F982ED5F2B8002D1FF1 /* ApiModel.swift in Sources */,
+				CC293F922ED5F1D4002D1FF1 /* TaskDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,7 +313,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CCFD004F2ED4E12400A40D46 /* DataModel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,7 +320,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CCFD00512ED4E12400A40D46 /* DataModel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -698,12 +630,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		CCFD004D2ED4E12400A40D46 /* DataModel.xcdatamodeld */ = {
+		CC293F992ED5F2E1002D1FF1 /* DataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				CCFD004E2ED4E12400A40D46 /* DataModel.xcdatamodel */,
+				CC293F9A2ED5F2E1002D1FF1 /* DataModel.xcdatamodel */,
 			);
-			currentVersion = CCFD004E2ED4E12400A40D46 /* DataModel.xcdatamodel */;
+			currentVersion = CC293F9A2ED5F2E1002D1FF1 /* DataModel.xcdatamodel */;
 			path = DataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
