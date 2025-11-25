@@ -154,17 +154,7 @@ class TaskViewModel: ObservableObject {
         loadTasksFromApi()
     }
     
-    // MARK: - Поиск и форматирование
-//    @Published var searchText: String = ""
-//
     
-    
-    
-    
-    
-    
-    
-    // Вычисляемое свойство для отфильтрованных задач
     var filteredTasks: [DataTask] {
         if searchText.isEmpty {
             return tasks
@@ -199,18 +189,5 @@ class TaskViewModel: ObservableObject {
         }
     }
 }
-
-/*
- Что ты должен вынести как джун:
- Разделяй модели: API-модель ≠ UI-модель.
- Понимай структуру JSON: иногда надо заводить обёртки (ApiResponse).
- Не инициализируй Published-свойства с зависимостями напрямую — делай это в init или функциях.
- Передавай один и тот же ViewModel в иерархии.
- @StateObject создаётся один раз (в корне), дальше — только @ObservedObject.
- MVVM в SwiftUI проще, чем в UIKit:
- ViewModel: данные + бизнес-логика
- View: только отображение
- */
-
 
 

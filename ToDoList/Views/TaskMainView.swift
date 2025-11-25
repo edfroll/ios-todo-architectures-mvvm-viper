@@ -148,7 +148,7 @@ struct TaskMainView: View {
 
 // MARK: - Структура ячейки
 struct TaskRow: View {
-    let task: TaskModel
+    let task: DataTask
     let dateString: String
     let toggleAction: () -> Void
     

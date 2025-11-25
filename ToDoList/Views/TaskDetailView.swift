@@ -15,9 +15,8 @@ struct TaskDetailView: View {
     @State private var newTitle = ""
     @State private var newBody = ""
     
-   // @FocusState private var isDescriptionFocused: Bool
     
-    private var task: TaskModel? {
+    private var task: DataTask? {
         viewModel.tasks.first(where: { $0.id == taskId })
     }
     
@@ -98,7 +97,3 @@ struct TaskDetailView: View {
 /*
  Single Source of Truth (единственный источник истины) - данные должны храниться в одном месте (viewModel.tasks), а все остальные части приложения должны ссылаться на эти данные, а не создавать их копии.
  */
-//                viewModel.updateTask(id: taskId, newTitle: newTaskTitle, newDescription: newTaskDescription)
-#Preview {
-//    TaskDetailView(task: TaskModel(title: "TaskTitle", description: "Test description", date: .now, isCompleted: false), viewModel: TaskViewModel())
-}
