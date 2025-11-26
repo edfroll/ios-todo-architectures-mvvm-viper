@@ -117,6 +117,7 @@ struct TaskMainView: View {
                     HStack {
                         Button {
                             viewModel.resetAndReload()
+                            print("TaskMainView вызывает vm.resetAndReload")
                         } label: {
                             Text("☠")
                                 .font(.system(size: 26))

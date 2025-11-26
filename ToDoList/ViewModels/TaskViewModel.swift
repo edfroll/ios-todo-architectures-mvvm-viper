@@ -7,24 +7,21 @@
 import SwiftUI
 import CoreData
 
+@MainActor
 class TaskViewModel: ObservableObject {
     
     let container: NSPersistentContainer
-    @StateObject private var jsonVM = JsonViewModel()
+    var jsonVM: JsonViewModel = JsonViewModel()
     
     @Published var tasks: [DataTask] = []
     @Published var searchText: String = ""
     
-    
-//    private var jsonVM = JsonViewModel()
     
     init() {
         container = NSPersistentContainer(name: "DataModel")
         container.loadPersistentStores { description, error in
             if let error = error {
                 print("❌ Ошибка загрузки CoreData: \(error.localizedDescription)")
-            } else {
-                print("✅ CoreData успешно загружена")
             }
         }
         fetchData()
@@ -35,7 +32,6 @@ class TaskViewModel: ObservableObject {
         let hasLoaded = UserDefaults.standard.bool(forKey: "hasLoadedInitialData")
         
         if !hasLoaded && tasks.isEmpty {
-            print("🔄 Загрузка начальных данных из API...")
             loadTasksFromApi()
             UserDefaults.standard.set(true, forKey: "hasLoadedInitialData")
         }
@@ -43,22 +39,25 @@ class TaskViewModel: ObservableObject {
     
     // MARK: - Network
     func loadTasksFromApi() {
-        self.tasks = jsonVM.tasks
-//        jsonVM.fetchTasks { [weak self] in
-            guard let self = self else { return }
-            
-            for apiTask in self.jsonVM.tasks {
-                let newTask = DataTask(context: self.container.viewContext)
-                newTask.id = UUID()
-                newTask.title = String(apiTask.id)
-                newTask.body = apiTask.todo
-                newTask.date = Date.now
-                newTask.isCompleted = apiTask.completed
+        print("Вызван метод loadTasksFromApi")
+        Task {
+            do {
+                let apiTasks = try await jsonVM.fetchTasks()
+                
+                for apiTask in apiTasks {
+                    let newTask = DataTask(context: container.viewContext)
+                    newTask.id = UUID()
+                    newTask.title = String(apiTask.id)
+                    newTask.body = String(apiTask.todo)
+                    newTask.date = .now
+                    newTask.isCompleted = apiTask.completed
+                }
+                saveContext()
+                fetchData()// здесь нужен main!
+            } catch {
+                print("Ошибка загрузки данных из API: \(error)")
             }
-            saveContext()
-            fetchData()
         }
-        
     }
 
     // MARK: - Create
@@ -79,13 +78,14 @@ class TaskViewModel: ObservableObject {
     // MARK: - Read
     func fetchData() {
         let request = NSFetchRequest<DataTask>(entityName: "DataTask")
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \DataTask.isCompleted, ascending: true)]
-       // request.sortDescriptors = [NSSortDescriptor(keyPath: \TaskModel.date, ascending: false)]
-        
+        request.sortDescriptors = [
+            NSSortDescriptor(keyPath: \DataTask.isCompleted, ascending: true),
+            NSSortDescriptor(keyPath: \DataTask.date, ascending: false)
+        ]
         do {
-            tasks = try container.viewContext.fetch(request)
+            tasks = try container.viewContext.fetch(request) // viewContext.fetch по умолчанию выполняется в каком потоке? Фоновом? А то у меня фиолетовая ошибка в рантайме вылетала на эту строку мол Main Thread Violation
         } catch {
-            print("❌ Ошибка загрузки данных \(error.localizedDescription)")
+            print("Ошибка загрузки данных: \(error.localizedDescription)")
         }
     }
     
@@ -111,13 +111,13 @@ class TaskViewModel: ObservableObject {
             task.body = newBody
             didChange = true
         }
-        
     }
     
     func toggleTaskCompletion(at id: UUID) {
         guard let task = tasks.first(where: { $0.id == id }) else { return }
         
         task.isCompleted.toggle()
+        
         saveContext()
         fetchData()
     }
@@ -131,6 +131,11 @@ class TaskViewModel: ObservableObject {
         saveContext()
         fetchData()
     }
+    /*
+     1. Оттебажить кнопку reset and reload.
+     2. ViewModel - @MainActor. Все остальное - сервисы (если есть резон(тяжелые задачи)
+     3. Я написал loadTaskFromApi, осталось все проверить и шлейфануть SwiftUI + MVVM + Core Data + async/await
+     */
     
     // MARK: - Helper
     func saveContext() {
@@ -142,6 +147,7 @@ class TaskViewModel: ObservableObject {
                 print("❌ Ошибка сохранения \(error.localizedDescription)")
             }
         }
+        print("viewContext сохранен")
     }
 
     // MARK: - Reset and Reload
