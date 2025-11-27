@@ -6,7 +6,7 @@
 
 import Foundation
 
-class JsonViewModel {
+struct JsonViewModel {
     
     func fetchTasks() async throws -> [ApiModel] {
         guard let url = URL(string: "https://dummyjson.com/todos") else {

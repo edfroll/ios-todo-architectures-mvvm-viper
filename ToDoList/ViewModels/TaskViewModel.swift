@@ -11,11 +11,17 @@ import CoreData
 class TaskViewModel: ObservableObject {
     
     let container: NSPersistentContainer
-    var jsonVM: JsonViewModel = JsonViewModel()
+    
+    private let jsonVM: JsonViewModel = JsonViewModel()
     
     @Published var tasks: [DataTask] = []
     @Published var searchText: String = ""
     
+    private lazy var bgContext: NSManagedObjectContext = {
+        let context = container.newBackgroundContext()
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        return context
+    } ()
     
     init() {
         container = NSPersistentContainer(name: "DataModel")
@@ -24,6 +30,8 @@ class TaskViewModel: ObservableObject {
                 print("❌ Ошибка загрузки CoreData: \(error.localizedDescription)")
             }
         }
+        container.viewContext.automaticallyMergesChangesFromParent = true
+
         fetchData()
         loadInitialDataIfNeeded()
     }
@@ -39,24 +47,33 @@ class TaskViewModel: ObservableObject {
     
     // MARK: - Network
     func loadTasksFromApi() {
-        print("Вызван метод loadTasksFromApi")
         Task {
             do {
                 let apiTasks = try await jsonVM.fetchTasks()
                 
-                for apiTask in apiTasks {
-                    let newTask = DataTask(context: container.viewContext)
-                    newTask.id = UUID()
-                    newTask.title = String(apiTask.id)
-                    newTask.body = String(apiTask.todo)
-                    newTask.date = .now
-                    newTask.isCompleted = apiTask.completed
+                try await saveApiTasks(apiTasks)
+
+                await MainActor.run {
+                    self.fetchData()
                 }
-                saveContext()
-                fetchData()// здесь нужен main!
+                
             } catch {
                 print("Ошибка загрузки данных из API: \(error)")
             }
+        }
+    }
+    
+    func saveApiTasks(_ apiTasks: [ApiModel]) async throws {
+        try await bgContext.perform {
+            for api in apiTasks {
+                let task = DataTask(context: self.bgContext)
+                task.id = UUID()
+                task.title = String(api.id)
+                task.body = api.todo
+                task.date = .now
+                task.isCompleted = api.completed
+            }
+            try self.bgContext.save()
         }
     }
 
@@ -83,7 +100,7 @@ class TaskViewModel: ObservableObject {
             NSSortDescriptor(keyPath: \DataTask.date, ascending: false)
         ]
         do {
-            tasks = try container.viewContext.fetch(request) // viewContext.fetch по умолчанию выполняется в каком потоке? Фоновом? А то у меня фиолетовая ошибка в рантайме вылетала на эту строку мол Main Thread Violation
+            tasks = try container.viewContext.fetch(request)
         } catch {
             print("Ошибка загрузки данных: \(error.localizedDescription)")
         }
@@ -131,11 +148,7 @@ class TaskViewModel: ObservableObject {
         saveContext()
         fetchData()
     }
-    /*
-     1. Оттебажить кнопку reset and reload.
-     2. ViewModel - @MainActor. Все остальное - сервисы (если есть резон(тяжелые задачи)
-     3. Я написал loadTaskFromApi, осталось все проверить и шлейфануть SwiftUI + MVVM + Core Data + async/await
-     */
+
     
     // MARK: - Helper
     func saveContext() {
@@ -152,15 +165,17 @@ class TaskViewModel: ObservableObject {
 
     // MARK: - Reset and Reload
     func resetAndReload() {
-        for task in tasks {
-            container.viewContext.delete(task)
+        Task {
+            for task in tasks {
+                container.viewContext.delete(task)
+            }
+            saveContext()
+            
+            UserDefaults.standard.removeObject(forKey: "hasLoadedInitialData")
+            
+            loadTasksFromApi()
         }
-        saveContext()
-        UserDefaults.standard.removeObject(forKey: "hasLoadedInitialData")
-        
-        loadTasksFromApi()
     }
-    
     // MARK: - Formatting
     var filteredTasks: [DataTask] {
         if searchText.isEmpty {
