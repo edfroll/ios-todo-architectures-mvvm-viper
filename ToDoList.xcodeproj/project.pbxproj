@@ -16,6 +16,7 @@
 		CC293F962ED5F297002D1FF1 /* JsonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC293F952ED5F293002D1FF1 /* JsonViewModel.swift */; };
 		CC293F982ED5F2B8002D1FF1 /* ApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC293F972ED5F2B5002D1FF1 /* ApiModel.swift */; };
 		CC293F9B2ED5F2E1002D1FF1 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CC293F992ED5F2E1002D1FF1 /* DataModel.xcdatamodeld */; };
+		CC2940012ED875FD002D1FF1 /* TaskDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2940002ED875F6002D1FF1 /* TaskDisplayModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		CC293F952ED5F293002D1FF1 /* JsonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonViewModel.swift; sourceTree = "<group>"; };
 		CC293F972ED5F2B5002D1FF1 /* ApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiModel.swift; sourceTree = "<group>"; };
 		CC293F9A2ED5F2E1002D1FF1 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		CC2940002ED875F6002D1FF1 /* TaskDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDisplayModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -132,6 +134,7 @@
 		CC293F8C2ED5F16C002D1FF1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CC2940002ED875F6002D1FF1 /* TaskDisplayModel.swift */,
 				CC293F972ED5F2B5002D1FF1 /* ApiModel.swift */,
 				CC293F992ED5F2E1002D1FF1 /* DataModel.xcdatamodeld */,
 			);
@@ -302,6 +305,7 @@
 				CC293F902ED5F1CD002D1FF1 /* TaskMainView.swift in Sources */,
 				CC293F942ED5F204002D1FF1 /* TaskViewModel.swift in Sources */,
 				CC1A2F2A2ED4B2D200633CAD /* ToDoListApp.swift in Sources */,
+				CC2940012ED875FD002D1FF1 /* TaskDisplayModel.swift in Sources */,
 				CC293F9B2ED5F2E1002D1FF1 /* DataModel.xcdatamodeld in Sources */,
 				CC293F962ED5F297002D1FF1 /* JsonViewModel.swift in Sources */,
 				CC293F982ED5F2B8002D1FF1 /* ApiModel.swift in Sources */,

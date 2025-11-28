@@ -9,15 +9,16 @@ import SwiftUI
 struct TaskDetailView: View {
     
     let taskId: UUID
-    @ObservedObject var viewModel: TaskViewModel
+    @ObservedObject var vm: TaskViewModel
     @Environment(\.dismiss) private var dismiss
     
     @State private var newTitle = ""
     @State private var newBody = ""
     
     
-    private var task: DataTask? {
-        viewModel.tasks.first(where: { $0.id == taskId })
+    private var task: TaskDisplayModel? {
+        vm.tasks.first(where: { $0.id == taskId })
+        
     }
     
     var body: some View {
@@ -25,7 +26,6 @@ struct TaskDetailView: View {
             VStack(alignment: .leading, spacing: 20) {
                 // Заголовок
                 TextField("Заголовок задачи", text: $newTitle, axis: .vertical)
-                //.font(.system(.title, weight: .semibold))
                     .font(.largeTitle)
                     .bold()
                     .foregroundStyle(.primary)
@@ -33,8 +33,8 @@ struct TaskDetailView: View {
                     .padding(.top, 12)
                 
                 // Дата
-                if let task = task, let date = task.date {
-                    Text(viewModel.formatter.string(from: date))
+                if let task = task {
+                    Text(task.dateString)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .padding(.horizontal)
@@ -51,14 +51,15 @@ struct TaskDetailView: View {
                                 .font(.system(size: 18))
                                 .foregroundStyle(Color.gray.opacity(0.5))
                                 .padding(.horizontal, 8)
-                                .padding(.vertical, 8) // почему он необходим?
                                 .allowsHitTesting(false)
                         }
                 }
                 .padding(.horizontal)
+                
                 Spacer()
                 
             }
+            // MARK: - Toolbar
             .toolbar {
                 ToolbarItem(placement: .navigation) {
                     Button {
@@ -70,22 +71,19 @@ struct TaskDetailView: View {
                             Text("Назад")
                                 .font(.system(size: 18))
                         }
-                       
-                        
                     }
                 }
             }
             .navigationBarBackButtonHidden()
             .onAppear {
                 if let task = task {
-                    newTitle = task.title ?? ""
-                    newBody = task.body ?? ""
-                    //isDescriptionFocused = true
+                    newTitle = task.title
+                    newBody = task.body
                 }
             }
             
             .onDisappear {
-                viewModel.updateTask(id: taskId, newTitle: newTitle, newBody: newBody)
+                vm.updateTask(id: taskId, newTitle: newTitle, newBody: newBody)
 
             }
         }
