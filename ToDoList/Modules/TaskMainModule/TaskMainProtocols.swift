@@ -5,6 +5,7 @@
 //  Created by Эдвард on 24.11.2025.
 //
 import Foundation
+import Combine
 
 // MARK: - Main Presenter Protocol
 protocol TaskMainPresenterProtocol: AnyObject {
@@ -25,6 +26,7 @@ protocol TaskMainPresenterProtocol: AnyObject {
 // MARK: - Main Interactor Protocol
 protocol TaskMainInteractorProtocol: AnyObject {
     var presenter: TaskMainPresenterProtocol? { get set }
+    var reloadCompleted: PassthroughSubject<Void, Never> { get }
     
     func fetchTasks()
     func loadInitialDataIfNeeded()

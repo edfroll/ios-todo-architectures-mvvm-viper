@@ -13,11 +13,13 @@ class TaskMainPresenter: TaskMainPresenterProtocol, ObservableObject {
     
     @Published var displayTasks: [TaskDisplayModel] = []
     @Published var searchText: String = ""
+    @Published var isReloading: Bool = false
     
     init(interactor: TaskMainInteractorProtocol, router: TaskMainRouterProtocol) {
         self.interactor = interactor
         self.router = router
         setupUpdateObserver()
+        setupResetAndReloadObserver()
     }
 
     private var cancellables = Set<AnyCancellable>()
@@ -28,6 +30,15 @@ class TaskMainPresenter: TaskMainPresenterProtocol, ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.interactor.fetchTasks()
+            }
+            .store(in: &cancellables)
+    }
+    
+    func setupResetAndReloadObserver() {
+        interactor.reloadCompleted
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.isReloading = false
             }
             .store(in: &cancellables)
     }
@@ -48,6 +59,9 @@ class TaskMainPresenter: TaskMainPresenterProtocol, ObservableObject {
     }
     
     func userDidTapReset() {
+        guard !isReloading else { return }
+        
+        isReloading = true
         interactor.resetAndReload()
     }
     

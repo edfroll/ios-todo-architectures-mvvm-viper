@@ -140,11 +140,11 @@ struct RawTaskRow: View {
         .padding(.vertical)
     }
 }
-
-// MARK: - Нижняя панель
+//MARK: - Нижняя панель
 struct BottomBar: View {
     @ObservedObject var vm: TaskMainPresenter
-    
+    @State private var rotationAngle: Double = 0
+
     var body: some View {
         ZStack {
             Text(vm.taskCountText(for: vm.displayTasks.count))
@@ -167,18 +167,29 @@ struct BottomBar: View {
                 } label: {
                     Image(systemName: "arrow.clockwise.circle")
                         .font(.system(size: 26))
-                        .foregroundStyle(.gray)
-                        .padding(.leading, 26)
+                        .foregroundStyle(vm.isReloading ? .gray.opacity(0.5) : .gray)
+                        .rotationEffect(.degrees(rotationAngle))
+                }
+                .padding(.leading, 26)
+                .disabled(vm.isReloading)
+                .onChange(of: vm.isReloading) { oldValue, isReloading in
+                    if isReloading {
+                        withAnimation(.linear(duration: 1).repeatForever(autoreverses: false)) {
+                            rotationAngle = 360
+                        }
+                    } else {
+                        withAnimation(.linear(duration: 0.3)) {
+                            rotationAngle = 0
+                        }
+                    }
                 }
                 Spacer()
             }
         }
-        
         .padding(.top)
         .background(Color.gray.opacity(0.2).ignoresSafeArea(edges: .bottom))
     }
 }
-
 #Preview {
     TaskMainRouter.build()
 }

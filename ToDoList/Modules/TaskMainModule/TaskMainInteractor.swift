@@ -6,15 +6,18 @@
 //
 import Foundation
 import CoreData
+import Combine
 
 class TaskMainInteractor: TaskMainInteractorProtocol {
 
     weak var presenter: TaskMainPresenterProtocol?
     
-    
     private let container: NSPersistentContainer
     private let jsonService: JsonService
     private var tasks: [DataTask] = [] // Локальный кэш для операций интерактора
+    
+    let reloadCompleted = PassthroughSubject<Void, Never>()
+    private var isReloading = false
     
     // ✅ Dependency Injection для тестов
     init(container: NSPersistentContainer = CoreDataManager.shared.container, jsonService: JsonService = JsonService()) {
@@ -75,7 +78,6 @@ class TaskMainInteractor: TaskMainInteractorProtocol {
         let hasLoaded = UserDefaults.standard.bool(forKey: "hasLoadedInitialData")
         
         if !hasLoaded && tasks.isEmpty {
-            print("hasLoaded and tasks.isEmpty")
             Task {
                 do {
                     let apiTasks = try await jsonService.fetchTasks()
@@ -100,6 +102,9 @@ class TaskMainInteractor: TaskMainInteractorProtocol {
     
     // MARK: - Reset
     func resetAndReload() {
+        guard !isReloading else { return }
+        isReloading = true
+        
         let request = NSFetchRequest<DataTask>(entityName: "DataTask")
         do {
             let tasks = try container.viewContext.fetch(request)
@@ -110,9 +115,16 @@ class TaskMainInteractor: TaskMainInteractorProtocol {
             fetchTasks()
             UserDefaults.standard.removeObject(forKey: "hasLoadedInitialData")
             loadInitialDataIfNeeded()
-            print("Сброс произведен")
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                self?.isReloading = false
+                self?.reloadCompleted.send()
+            }
+            
         } catch {
             print("❌ Ошибка сброса данных: \(error.localizedDescription)")
+            isReloading = false
+            reloadCompleted.send()
         }
     }
     
