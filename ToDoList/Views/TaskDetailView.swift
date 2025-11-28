@@ -50,7 +50,7 @@ struct TaskDetailView: View {
                             Text("Введите описание задачи...")
                                 .font(.system(size: 18))
                                 .foregroundStyle(Color.gray.opacity(0.5))
-                                .padding(.horizontal, 8)
+                                .padding(8)
                                 .allowsHitTesting(false)
                         }
                 }

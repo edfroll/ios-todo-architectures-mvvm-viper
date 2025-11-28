@@ -15,6 +15,7 @@ class TaskViewModel: ObservableObject {
     
     @Published var tasks: [TaskDisplayModel] = []
     @Published var searchText: String = ""
+    @Published var isReloading: Bool = false
     
     // MARK: - Init
     init() {
@@ -151,6 +152,10 @@ class TaskViewModel: ObservableObject {
 
     // MARK: - Reset and Reload
     func resetAndReload() {
+        guard !isReloading else { return }
+        
+        isReloading = true
+        
         Task {
             do {
                 try await bgContext.perform {
@@ -169,7 +174,6 @@ class TaskViewModel: ObservableObject {
                         into: [self.container.viewContext]
                     )
                 }
-                // Реинициализация загрузки
                 UserDefaults.standard.removeObject(forKey: "hasLoadedInitialData")
                 
                 await MainActor.run {
@@ -177,9 +181,12 @@ class TaskViewModel: ObservableObject {
                 }
                 
                 loadTasksFromApi()
+                
+                try await Task.sleep(for: .seconds(1))
             } catch {
-                print("Ошибка сброса данных")
+                print("Ошибка сброса данных: \(error)")
             }
+            isReloading = false
         }
     }
     
