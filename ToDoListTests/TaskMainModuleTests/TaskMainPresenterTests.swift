@@ -42,15 +42,6 @@ final class TaskMainPresenterTests: XCTestCase {
         XCTAssertTrue(mockInteractor.loadInitialDataCalled)
     }
     
-    // MARK: - Tests: Search
-    func testUserDidSearch_UpdatesSearchText() {
-        // When
-        sut.userDidSearch(query: "test query")
-        
-        // Then
-        XCTAssertEqual(sut.searchText, "test query")
-    }
-    
     func testUserDidSearch_FiltersTasksByTitle() {
         // Given
         let task1 = createMockDataTask(id: UUID(), title: "Buy milk", body: "From store")
@@ -58,7 +49,8 @@ final class TaskMainPresenterTests: XCTestCase {
         sut.didFetchTasks([task1, task2])
         
         // When
-        sut.userDidSearch(query: "milk")
+        sut.searchText = "milk"
+        sut.userDidSearch()
         
         // Then
         let expectation = XCTestExpectation(description: "Tasks filtered")
@@ -77,7 +69,8 @@ final class TaskMainPresenterTests: XCTestCase {
         sut.didFetchTasks([task1, task2])
         
         // When
-        sut.userDidSearch(query: "milk")
+        sut.searchText = "milk"
+        sut.userDidSearch()
         
         // Then
         let expectation = XCTestExpectation(description: "Tasks filtered")
@@ -96,7 +89,8 @@ final class TaskMainPresenterTests: XCTestCase {
         sut.didFetchTasks([task1, task2])
         
         // When
-        sut.userDidSearch(query: "")
+        sut.searchText = ""
+        sut.userDidSearch()
         
         // Then
         let expectation = XCTestExpectation(description: "All tasks shown")
@@ -234,6 +228,7 @@ final class TaskMainPresenterTests: XCTestCase {
 
 // MARK: - Mock Interactor
 class MockTaskMainInteractor: TaskMainInteractorProtocol {
+    var reloadCompleted = PassthroughSubject<Void, Never>()
     var presenter: TaskMainPresenterProtocol?
     
     var fetchTasksCalled = false

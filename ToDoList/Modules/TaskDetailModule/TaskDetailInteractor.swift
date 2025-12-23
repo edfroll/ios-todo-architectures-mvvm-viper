@@ -8,7 +8,7 @@ import Foundation
 import CoreData
 
 // Бизнес логика для работы с одной задачей
-class TaskDetailInteractor: TaskDetailInteractorProtocol {
+final class TaskDetailInteractor: TaskDetailInteractorProtocol {
     
     weak var presenter: TaskDetailPresenterProtocol?
     

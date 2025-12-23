@@ -6,7 +6,7 @@
 //
 import Foundation
 
-class TaskDetailRouter: TaskDetailRouterProtocol, ObservableObject {
+final class TaskDetailRouter: TaskDetailRouterProtocol, ObservableObject {
     
     static func createModule(taskId: UUID) -> TaskDetailView {
         let router = TaskDetailRouter()

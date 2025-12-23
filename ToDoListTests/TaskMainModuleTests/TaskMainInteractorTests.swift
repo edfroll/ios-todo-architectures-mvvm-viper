@@ -192,7 +192,7 @@ class MockTaskMainPresenter: TaskMainPresenterProtocol {
     
     func setupUpdateObserver() {}
     func viewDidLoad() {}
-    func userDidSearch(query: String) {}
+    func userDidSearch() {}
     func userDidTapAddTask() {}
     func userDidTapReset() {}
     func userDidTapToggleCompletion(for id: UUID) {}

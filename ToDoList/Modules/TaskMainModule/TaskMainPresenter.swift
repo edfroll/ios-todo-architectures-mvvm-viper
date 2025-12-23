@@ -6,7 +6,8 @@
 //
 import Foundation
 import Combine
-class TaskMainPresenter: TaskMainPresenterProtocol, ObservableObject {
+
+final class TaskMainPresenter: TaskMainPresenterProtocol, ObservableObject {
     
     private let interactor: TaskMainInteractorProtocol
     private let router: TaskMainRouterProtocol

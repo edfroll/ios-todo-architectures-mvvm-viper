@@ -30,9 +30,6 @@ struct TaskMainView: View {
                 }
                 .listStyle(.plain)
                 .searchable(text: $vm.searchText, prompt: "Search")
-//                .onChange(of: vm.searchText) { newValue in
-//                    vm.userDidSearch(query: newValue)
-//                }
                 .onChange(of: vm.searchText) {
                     vm.userDidSearch()
                 }

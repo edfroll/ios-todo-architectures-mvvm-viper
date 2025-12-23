@@ -7,8 +7,8 @@
 
 import Foundation
 
+// MARK: - API Models
 struct ApiModel: Identifiable, Codable {
-    
     let id: Int
     let todo: String
     let completed: Bool
@@ -19,13 +19,75 @@ struct ApiResponse: Codable {
     let todos: [ApiModel]
 }
 
-class JsonService {
-    func fetchTasks() async throws -> [ApiModel] {
-        guard let url = URL(string: "https://dummyjson.com/todos") else {
-            throw URLError(.badURL)
+// MARK: - Custom Errors
+enum JsonServiceError: LocalizedError {
+    case invalidURL
+    case noData
+    case decodingFailed(Error)
+    case networkError(Error)
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return "Invalid API URL"
+        case .noData:
+            return "No data received from server"
+        case .decodingFailed(let error):
+            return "Failed to decode response: \(error.localizedDescription)"
+        case .networkError(let error):
+            return "Network error: \(error.localizedDescription)"
         }
-        let (data, _) = try await URLSession.shared.data(from: url)
-        let response = try JSONDecoder().decode(ApiResponse.self, from: data)
-        return response.todos
+    }
+}
+
+// MARK: - JsonService
+final class JsonService {
+
+    func fetchTasks(completion: @escaping (Result<[ApiModel], JsonServiceError>) -> Void) {
+        
+        guard let url = URL(string: "https://dummyjson.com/todos") else {
+            DispatchQueue.main.async {
+                completion(.failure(.invalidURL))
+            }
+            return
+        }
+        
+        // Создаем data task
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            
+            // Обработка сетевой ошибки
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(.failure(.networkError(error)))
+                }
+                return
+            }
+            
+            // Проверка наличия данных
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(.failure(.noData))
+                }
+                return
+            }
+            
+            // Декодирование JSON
+            do {
+                let response = try JSONDecoder().decode(ApiResponse.self, from: data)
+                
+                // Успех - возвращаем на главном потоке
+                DispatchQueue.main.async {
+                    completion(.success(response.todos))
+                }
+                
+            } catch {
+                // Ошибка декодирования
+                DispatchQueue.main.async {
+                    completion(.failure(.decodingFailed(error)))
+                }
+            }
+        }
+        
+        task.resume()
     }
 }

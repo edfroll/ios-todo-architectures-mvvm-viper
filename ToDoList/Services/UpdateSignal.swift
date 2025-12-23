@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class UpdateSignal {
+final class UpdateSignal {
     static let shared = UpdateSignal()
     
     private init () {}
