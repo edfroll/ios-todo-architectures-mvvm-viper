@@ -17,7 +17,7 @@ final class TaskMainRouter: ObservableObject, TaskMainRouterProtocol {
     
     static func build() -> TaskMainView {
         let router = TaskMainRouter()
-        let interactor = TaskMainInteractor() // ✅ Используем дефолтные значения
+        let interactor = TaskMainInteractor() // Дефолтная инициализация
         let presenter = TaskMainPresenter(interactor: interactor, router: router)
         
         interactor.presenter = presenter

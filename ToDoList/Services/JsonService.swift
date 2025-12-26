@@ -42,46 +42,34 @@ enum JsonServiceError: LocalizedError {
 
 // MARK: - JsonService
 final class JsonService {
-
     func fetchTasks(completion: @escaping (Result<[ApiModel], JsonServiceError>) -> Void) {
-        
         guard let url = URL(string: "https://dummyjson.com/todos") else {
             DispatchQueue.main.async {
                 completion(.failure(.invalidURL))
             }
             return
         }
-        
-        // Создаем data task
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             
-            // Обработка сетевой ошибки
             if let error = error {
                 DispatchQueue.main.async {
                     completion(.failure(.networkError(error)))
                 }
                 return
             }
-            
-            // Проверка наличия данных
             guard let data = data else {
                 DispatchQueue.main.async {
                     completion(.failure(.noData))
                 }
                 return
             }
-            
-            // Декодирование JSON
             do {
                 let response = try JSONDecoder().decode(ApiResponse.self, from: data)
-                
-                // Успех - возвращаем на главном потоке
                 DispatchQueue.main.async {
                     completion(.success(response.todos))
                 }
                 
             } catch {
-                // Ошибка декодирования
                 DispatchQueue.main.async {
                     completion(.failure(.decodingFailed(error)))
                 }

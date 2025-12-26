@@ -21,7 +21,7 @@ final class CoreDataManager {
         container = NSPersistentContainer(name: "DataModel")
         
         if inMemory {
-            // ✅ Используем in-memory store description для тестов
+            // Используем in-memory store description для тестов
             let description = NSPersistentStoreDescription()
             description.type = NSInMemoryStoreType
             container.persistentStoreDescriptions = [description]

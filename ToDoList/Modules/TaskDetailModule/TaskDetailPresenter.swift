@@ -68,8 +68,8 @@ final class TaskDetailPresenter: TaskDetailPresenterProtocol, ObservableObject {
     }
 
     func didChangeTask() {
-        CoreDataManager.shared.saveContext() // ✅ Общий метод сохранения
-        UpdateSignal.shared.updatePublisher.send() // ✅ Сигнал обновления для MainModule
+        CoreDataManager.shared.saveContext() // Общий метод сохранения
+        UpdateSignal.shared.updatePublisher.send() // Сигнал обновления для MainModule
         
     }
     

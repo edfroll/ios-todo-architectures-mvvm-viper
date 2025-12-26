@@ -19,7 +19,7 @@ final class TaskMainInteractor: TaskMainInteractorProtocol {
     let reloadCompleted = PassthroughSubject<Void, Never>()
     private var isReloading = false
     
-    // ✅ Dependency Injection для тестов
+    // Пространство для маневра в тестах
     init(container: NSPersistentContainer = CoreDataManager.shared.container, jsonService: JsonService = JsonService()) {
         self.container = container
         self.jsonService = jsonService
@@ -34,10 +34,10 @@ final class TaskMainInteractor: TaskMainInteractorProtocol {
         
         do {
             tasks = try container.viewContext.fetch(request) // простой fetch - background thread не нужен
-            presenter?.didFetchTasks(self.tasks) // главный поток ✅
+            presenter?.didFetchTasks(self.tasks) // главный поток
             
         } catch {
-            print("❌ Ошибка чтения данных: \(error.localizedDescription)")
+            print("Ошибка чтения данных: \(error.localizedDescription)")
         }
         
     }
@@ -79,39 +79,33 @@ final class TaskMainInteractor: TaskMainInteractorProtocol {
         
         guard !hasLoaded && tasks.isEmpty else { return }
         
-        print("🔄 Загрузка начальных данных из API...")
+        print("Загрузка начальных данных из API...")
         
         fetchTasksFromApi { [weak self] success in
             guard self != nil else { return }
             
             if success {
                 UserDefaults.standard.set(true, forKey: "hasLoadedInitialData")
-                print("✅ Начальные данные загружены успешно")
+                print("Начальные данные загружены успешно")
             } else {
-                print("❌ Не удалось загрузить начальные данные")
+                print("Не удалось загрузить начальные данные")
             }
         }
     }
     
     // MARK: - API Integration
-        /// Загружает задачи из API и сохраняет в CoreData
-        // Parameter completion: Callback с результатом операции (true = успех, false = ошибка)
         private func fetchTasksFromApi(completion: @escaping (Bool) -> Void) {
-            
             jsonService.fetchTasks { [weak self] result in
+                
                 guard let self = self else {
                     completion(false)
                     return
                 }
                 
                 switch result {
-                case .success(let apiTasks):
-                    print("✅ Получено \(apiTasks.count) задач из API")
                     
-                    // сохраняем в фоновом потоке для не блокировки UI
+                case .success(let apiTasks):
                     self.container.performBackgroundTask { context in
-                        
-                        // создаем задачи в background context
                         for apiTask in apiTasks {
                             let newTask = DataTask(context: context)
                             newTask.id = UUID()
@@ -120,19 +114,15 @@ final class TaskMainInteractor: TaskMainInteractorProtocol {
                             newTask.date = .now
                             newTask.isCompleted = apiTask.completed
                         }
-                        
-                        // сохраняем изменения
                         do {
                             try context.save()
                             
-                            // обновляем UI на главном потоке
                             DispatchQueue.main.async {
                                 self.fetchTasks()
                                 completion(true)
                             }
-                            
                         } catch {
-                            print("❌ Ошибка сохранения CoreData: \(error.localizedDescription)")
+                            print("Ошибка сохранения CoreData: \(error.localizedDescription)")
                             DispatchQueue.main.async {
                                 completion(false)
                             }
@@ -140,35 +130,30 @@ final class TaskMainInteractor: TaskMainInteractorProtocol {
                     }
                     
                 case .failure(let error):
-                    // Уже на main thread благодаря JsonService
-                    print("❌ Ошибка загрузки из API: \(error.localizedDescription)")
+                    print("Ошибка загрузки из API: \(error.localizedDescription)")
                     completion(false)
                 }
             }
         }
         
         // MARK: - Reset & Reload
-        
         func resetAndReload() {
             guard !isReloading else {
-                print("⚠️ Перезагрузка уже выполняется")
+                print("Перезагрузка уже выполняется")
                 return
             }
             
             isReloading = true
-            print("🔄 Сброс и перезагрузка данных...")
+            print("Сброс и перезагрузка данных...")
             
-            // удаляем все задачи
             deleteAllTasks { [weak self] success in
                 guard let self = self, success else {
                     self?.finishReloading(success: false)
                     return
                 }
-                
-                // сбрасываем флаг
+
                 UserDefaults.standard.removeObject(forKey: "hasLoadedInitialData")
-                
-                // загружаем новые данные
+
                 self.fetchTasksFromApi { [weak self] success in
                     guard let self = self else { return }
                     
@@ -180,7 +165,6 @@ final class TaskMainInteractor: TaskMainInteractorProtocol {
             }
         }
         
-        /// Удаляет все задачи из базы
         private func deleteAllTasks(completion: @escaping (Bool) -> Void) {
             let request = NSFetchRequest<DataTask>(entityName: "DataTask")
             
@@ -205,15 +189,14 @@ final class TaskMainInteractor: TaskMainInteractorProtocol {
             }
         }
         
-        /// Завершает процесс перезагрузки
         private func finishReloading(success: Bool) {
             isReloading = false
             reloadCompleted.send()
             
             if success {
-                print("✅ Данные успешно перезагружены")
+                print("Данные успешно перезагружены")
             } else {
-                print("⚠️ Перезагрузка завершена с ошибками")
+                print("Перезагрузка завершена с ошибками")
             }
         }
     }

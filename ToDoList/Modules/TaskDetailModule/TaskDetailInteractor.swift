@@ -7,7 +7,6 @@
 import Foundation
 import CoreData
 
-// Бизнес логика для работы с одной задачей
 final class TaskDetailInteractor: TaskDetailInteractorProtocol {
     
     weak var presenter: TaskDetailPresenterProtocol?
@@ -29,11 +28,11 @@ final class TaskDetailInteractor: TaskDetailInteractorProtocol {
         do {
             if let task = try container.viewContext.fetch(request).first { // простой fetch - background thread не нужен
                 self.task = task // добавляем кеш
-                presenter?.didFetchTask(task) // главный поток ✅
+                presenter?.didFetchTask(task) // главный поток
             }
             
         } catch {
-            print("❌ Ошибка загрузки задачи: \(error.localizedDescription)")
+            print("Ошибка загрузки задачи: \(error.localizedDescription)")
         }
     }
     
@@ -49,14 +48,14 @@ final class TaskDetailInteractor: TaskDetailInteractorProtocol {
         }
         
         task.date = Date.now
-        presenter?.didChangeTask() // ✅ Единый сигнал обновления
+        presenter?.didChangeTask()
         
     }
     
     func deleteTask() {
         guard let task = task else { return }
         container.viewContext.delete(task)
-        presenter?.didChangeTask() // ✅ Единый сигнал обновления
+        presenter?.didChangeTask()
     }
     
     private lazy var request = {
