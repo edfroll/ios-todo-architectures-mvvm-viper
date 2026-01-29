@@ -7,7 +7,7 @@
 import Foundation
 import Combine
 
-// MARK: - Main Presenter Protocol
+// MARK: - Presenter
 protocol TaskMainPresenterProtocol: AnyObject {
     var displayTasks: [TaskDisplayModel] { get }
     var searchText: String { get set }
@@ -23,7 +23,7 @@ protocol TaskMainPresenterProtocol: AnyObject {
     func taskCountText(for count: Int) -> String
     func didFetchTasks(_ tasks: [DataTask])
 }
-// MARK: - Main Interactor Protocol
+// MARK: - Interactor
 protocol TaskMainInteractorProtocol: AnyObject {
     var presenter: TaskMainPresenterProtocol? { get set }
     var reloadCompleted: PassthroughSubject<Void, Never> { get }
@@ -35,7 +35,7 @@ protocol TaskMainInteractorProtocol: AnyObject {
     func deleteTask(at id: UUID)
     func resetAndReload()
 }
-// MARK: - Main Router Protocol
+// MARK: - Router
 protocol TaskMainRouterProtocol: AnyObject {
     var path: [UUID] { get set }
     

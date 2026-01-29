@@ -10,6 +10,7 @@ import Combine
 
 final class TaskMainInteractor: TaskMainInteractorProtocol {
     
+    // MARK: Properties
     weak var presenter: TaskMainPresenterProtocol?
     
     private let container: NSPersistentContainer
@@ -24,7 +25,7 @@ final class TaskMainInteractor: TaskMainInteractorProtocol {
         self.container = container
         self.jsonService = jsonService
     }
-    // MARK: - Fetch (Read)
+    // MARK: Fetch
     func fetchTasks() {
         let request = NSFetchRequest<DataTask>(entityName: "DataTask")
         request.sortDescriptors = [
@@ -42,7 +43,7 @@ final class TaskMainInteractor: TaskMainInteractorProtocol {
         
     }
     
-    // MARK: - Create
+    // MARK: Create
     func createNewTask() -> UUID {
         let newTask = DataTask(context: container.viewContext)
         let id = UUID()
@@ -57,7 +58,7 @@ final class TaskMainInteractor: TaskMainInteractorProtocol {
         return id
     }
     
-    // MARK: - Update
+    // MARK:  Update
     func toggleTaskCompletion(at id: UUID) {
         guard let task = tasks.first(where: { $0.id == id }) else { return }
         task.isCompleted.toggle()
@@ -65,7 +66,7 @@ final class TaskMainInteractor: TaskMainInteractorProtocol {
         fetchTasks()
     }
     
-    // MARK: - Delete
+    // MARK: Delete
     func deleteTask(at id: UUID) {
         guard let task = tasks.first(where: { $0.id == id }) else { return }
         container.viewContext.delete(task)
@@ -73,7 +74,7 @@ final class TaskMainInteractor: TaskMainInteractorProtocol {
         fetchTasks()
     }
     
-    // MARK: - Initial Data
+    // MARK: Initial Data
     func loadInitialDataIfNeeded() {
         let hasLoaded = UserDefaults.standard.bool(forKey: "hasLoadedInitialData")
         
@@ -93,110 +94,112 @@ final class TaskMainInteractor: TaskMainInteractorProtocol {
         }
     }
     
-    // MARK: - API Integration
-        private func fetchTasksFromApi(completion: @escaping (Bool) -> Void) {
-            jsonService.fetchTasks { [weak self] result in
-                
-                guard let self = self else {
-                    completion(false)
-                    return
-                }
-                
-                switch result {
-                    
-                case .success(let apiTasks):
-                    self.container.performBackgroundTask { context in
-                        for apiTask in apiTasks {
-                            let newTask = DataTask(context: context)
-                            newTask.id = UUID()
-                            newTask.title = String(apiTask.id)
-                            newTask.body = apiTask.todo
-                            newTask.date = .now
-                            newTask.isCompleted = apiTask.completed
-                        }
-                        do {
-                            try context.save()
-                            
-                            DispatchQueue.main.async {
-                                self.fetchTasks()
-                                completion(true)
-                            }
-                        } catch {
-                            print("Ошибка сохранения CoreData: \(error.localizedDescription)")
-                            DispatchQueue.main.async {
-                                completion(false)
-                            }
-                        }
-                    }
-                    
-                case .failure(let error):
-                    print("Ошибка загрузки из API: \(error.localizedDescription)")
-                    completion(false)
-                }
-            }
-        }
-        
-        // MARK: - Reset & Reload
-        func resetAndReload() {
-            guard !isReloading else {
-                print("Перезагрузка уже выполняется")
+    // MARK: API Integration
+    private func fetchTasksFromApi(completion: @escaping (Bool) -> Void) {
+        jsonService.fetchTasks { [weak self] result in
+            
+            guard let self = self else {
+                completion(false)
                 return
             }
             
-            isReloading = true
-            print("Сброс и перезагрузка данных...")
-            
-            deleteAllTasks { [weak self] success in
-                guard let self = self, success else {
-                    self?.finishReloading(success: false)
-                    return
-                }
-
-                UserDefaults.standard.removeObject(forKey: "hasLoadedInitialData")
-
-                self.fetchTasksFromApi { [weak self] success in
-                    guard let self = self else { return }
-                    
-                    // завершаем с задержкой для плавной анимации
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        self.finishReloading(success: success)
+            switch result {
+                
+            case .success(let apiTasks):
+                self.container.performBackgroundTask { context in
+                    for apiTask in apiTasks {
+                        let newTask = DataTask(context: context)
+                        newTask.id = UUID()
+                        newTask.title = String(apiTask.id)
+                        newTask.body = apiTask.todo
+                        newTask.date = .now
+                        newTask.isCompleted = apiTask.completed
+                    }
+                    do {
+                        try context.save()
+                        
+                        DispatchQueue.main.async {
+                            self.fetchTasks()
+                            completion(true)
+                        }
+                    } catch {
+                        print("Ошибка сохранения CoreData: \(error.localizedDescription)")
+                        DispatchQueue.main.async {
+                            completion(false)
+                        }
                     }
                 }
-            }
-        }
-        
-        private func deleteAllTasks(completion: @escaping (Bool) -> Void) {
-            let request = NSFetchRequest<DataTask>(entityName: "DataTask")
-            
-            do {
-                let tasks = try container.viewContext.fetch(request)
                 
-                for task in tasks {
-                    container.viewContext.delete(task)
-                }
-                
-                try container.viewContext.save()
-                self.tasks.removeAll()
-                
-                DispatchQueue.main.async {
-                    self.fetchTasks()
-                    completion(true)
-                }
-                
-            } catch {
-                print("❌ Ошибка удаления задач: \(error.localizedDescription)")
+            case .failure(let error):
+                print("Ошибка загрузки из API: \(error.localizedDescription)")
                 completion(false)
             }
         }
+    }
+    
+    // MARK: Reset
+    private func deleteAllTasks(completion: @escaping (Bool) -> Void) {
+        let request = NSFetchRequest<DataTask>(entityName: "DataTask")
         
-        private func finishReloading(success: Bool) {
-            isReloading = false
-            reloadCompleted.send()
+        do {
+            let tasks = try container.viewContext.fetch(request)
             
-            if success {
-                print("Данные успешно перезагружены")
-            } else {
-                print("Перезагрузка завершена с ошибками")
+            for task in tasks {
+                container.viewContext.delete(task)
+            }
+            
+            try container.viewContext.save()
+            self.tasks.removeAll()
+            
+            DispatchQueue.main.async {
+                self.fetchTasks()
+                completion(true)
+            }
+            
+        } catch {
+            print("❌ Ошибка удаления задач: \(error.localizedDescription)")
+            completion(false)
+        }
+    }
+    
+    // MARK: Reset & Reload
+    func resetAndReload() {
+        guard !isReloading else {
+            print("Перезагрузка уже выполняется")
+            return
+        }
+        
+        isReloading = true
+        print("Сброс и перезагрузка данных...")
+        
+        deleteAllTasks { [weak self] success in
+            guard let self = self, success else {
+                self?.finishReloading(success: false)
+                return
+            }
+            
+            UserDefaults.standard.removeObject(forKey: "hasLoadedInitialData")
+            
+            self.fetchTasksFromApi { [weak self] success in
+                guard let self = self else { return }
+                
+                // завершаем с задержкой для плавной анимации
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    self.finishReloading(success: success)
+                }
             }
         }
     }
+    
+    // MARK: Publisher
+    private func finishReloading(success: Bool) {
+        isReloading = false
+        reloadCompleted.send()
+        
+        if success {
+            print("Данные успешно перезагружены")
+        } else {
+            print("Перезагрузка завершена с ошибками")
+        }
+    }
+}

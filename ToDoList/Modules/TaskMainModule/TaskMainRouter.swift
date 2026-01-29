@@ -6,7 +6,6 @@
 //
 import SwiftUI
 
-// MARK: - Task Main Router
 final class TaskMainRouter: ObservableObject, TaskMainRouterProtocol {
 
     @Published var path: [UUID] = []

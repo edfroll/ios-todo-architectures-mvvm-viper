@@ -9,20 +9,26 @@ import CoreData
 
 final class TaskDetailInteractor: TaskDetailInteractorProtocol {
     
+    // MARK: Properties
     weak var presenter: TaskDetailPresenterProtocol?
     
     private let id: UUID
-    
     private var task: DataTask?
-
     let container: NSPersistentContainer
+    
+    private lazy var request = {
+        let request = NSFetchRequest<DataTask>(entityName: "DataTask")
+        request.predicate = NSPredicate(format: "id == %@", self.id as CVarArg)
+        request.fetchLimit = 1
+        return request
+    }()
     
     init(taskId: UUID, container: NSPersistentContainer) {
         self.id = taskId
         self.container = container
     }
     
-    // MARK: - Fetch task
+    // MARK: Fetch
     /// Главный метод этого интерактора. Без него остальные его методы - не сработают
     func fetchTask() {
         do {
@@ -36,7 +42,7 @@ final class TaskDetailInteractor: TaskDetailInteractorProtocol {
         }
     }
     
-    // MARK: - Update task
+    // MARK: Update
     func updateTask(_ newTitle: String?, _ newBody: String?) {
         guard let task = task else { return }
         
@@ -52,18 +58,11 @@ final class TaskDetailInteractor: TaskDetailInteractorProtocol {
         
     }
     
+    // MARK: Delete
     func deleteTask() {
         guard let task = task else { return }
         container.viewContext.delete(task)
         presenter?.didChangeTask()
     }
-    
-    private lazy var request = {
-        let request = NSFetchRequest<DataTask>(entityName: "DataTask")
-        request.predicate = NSPredicate(format: "id == %@", self.id as CVarArg)
-        request.fetchLimit = 1
-        return request
-    }()
-    
     
 }

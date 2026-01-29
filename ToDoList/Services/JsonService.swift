@@ -8,14 +8,14 @@
 import Foundation
 
 // MARK: - API Models
-struct ApiModel: Identifiable, Codable {
+struct ApiModel: Identifiable, Decodable {
     let id: Int
     let todo: String
     let completed: Bool
     let userId: Int
 }
 
-struct ApiResponse: Codable {
+struct ApiResponse: Decodable {
     let todos: [ApiModel]
 }
 

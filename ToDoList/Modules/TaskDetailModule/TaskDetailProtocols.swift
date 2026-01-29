@@ -6,7 +6,7 @@
 //
 import Foundation
 
-// MARK: - Detail Presenter Protocol
+// MARK: - Presenter
 protocol TaskDetailPresenterProtocol: AnyObject {
     func viewDidLoad()
     func userDidTapBack()
@@ -14,7 +14,7 @@ protocol TaskDetailPresenterProtocol: AnyObject {
     func didFetchTask(_ task: DataTask)
     func didChangeTask()
 }
-// MARK: - Detail Interactor Protocol
+// MARK: - Interactor
 protocol TaskDetailInteractorProtocol: AnyObject {
     var presenter: TaskDetailPresenterProtocol? { get set }
     
@@ -22,7 +22,7 @@ protocol TaskDetailInteractorProtocol: AnyObject {
     func updateTask(_ newTitle: String?, _ newBody: String?)
     func deleteTask()
 }
-// MARK: - Router Protocol
+// MARK: - Router
 protocol TaskDetailRouterProtocol: AnyObject {
     static func createModule(taskId: UUID) -> TaskDetailView
 }

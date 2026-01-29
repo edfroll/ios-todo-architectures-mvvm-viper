@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - Main structure
 struct TaskMainView: View {
     @StateObject var vm: TaskMainPresenter
     @StateObject var router: TaskMainRouter
@@ -46,7 +47,7 @@ struct TaskMainView: View {
     }
     
 }
-// MARK: - Готовая структура ячейки
+// MARK: - Completed Structure
 struct TaskRow: View {
     let task: TaskDisplayModel
     let vm: TaskMainPresenterProtocol
@@ -103,7 +104,7 @@ struct TaskRow: View {
         }
     }
 }
-// MARK: - Сырая структура ячейки
+// MARK: - Row Structure
 struct RawTaskRow: View {
     let task: TaskDisplayModel
     let toggleAction: () -> Void
@@ -137,7 +138,7 @@ struct RawTaskRow: View {
         .padding(.vertical)
     }
 }
-//MARK: - Нижняя панель
+//MARK: - BottomBar
 struct BottomBar: View {
     @ObservedObject var vm: TaskMainPresenter
     @State private var rotationAngle: Double = 0

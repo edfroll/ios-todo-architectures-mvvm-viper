@@ -8,6 +8,7 @@ import Foundation
 
 final class TaskDetailPresenter: TaskDetailPresenterProtocol, ObservableObject {
     
+    // MARK: Properties
     private let interactor: TaskDetailInteractorProtocol
     private let router: TaskDetailRouterProtocol
     
@@ -22,9 +23,11 @@ final class TaskDetailPresenter: TaskDetailPresenterProtocol, ObservableObject {
     @Published  var body: String = ""
     @Published  var dateString: String = ""
     
+    // MARK: Presenter Logic
     func viewDidLoad() {
         interactor.fetchTask()
     }
+    
     func didFetchTask(_ dataTask: DataTask) {
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }

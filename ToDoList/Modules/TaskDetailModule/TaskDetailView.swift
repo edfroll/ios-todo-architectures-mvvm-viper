@@ -15,7 +15,7 @@ struct TaskDetailView: View {
     
     var body: some View {
         ScrollView {
-            // MARK: - Main UI
+            // MARK: Main UI
             VStack(alignment: .leading, spacing: 20) {
                 // Заголовок
                 TextField("Заголовок задачи", text: $vm.title, axis: .vertical)

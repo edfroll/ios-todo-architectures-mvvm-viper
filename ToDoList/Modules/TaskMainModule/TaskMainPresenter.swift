@@ -9,12 +9,16 @@ import Combine
 
 final class TaskMainPresenter: TaskMainPresenterProtocol, ObservableObject {
     
+    // MARK: Properties
     private let interactor: TaskMainInteractorProtocol
     private let router: TaskMainRouterProtocol
     
     @Published var displayTasks: [TaskDisplayModel] = []
     @Published var searchText: String = ""
     @Published var isReloading: Bool = false
+
+    private var cancellables = Set<AnyCancellable>()
+    private var rawTasks: [DataTask] = []
     
     init(interactor: TaskMainInteractorProtocol, router: TaskMainRouterProtocol) {
         self.interactor = interactor
@@ -22,10 +26,8 @@ final class TaskMainPresenter: TaskMainPresenterProtocol, ObservableObject {
         setupUpdateObserver()
         setupResetAndReloadObserver()
     }
-
-    private var cancellables = Set<AnyCancellable>()
-    private var rawTasks: [DataTask] = []
     
+    // MARK: Subscriptions
     func setupUpdateObserver() {
         UpdateSignal.shared.updatePublisher
             .receive(on: DispatchQueue.main)
@@ -44,7 +46,7 @@ final class TaskMainPresenter: TaskMainPresenterProtocol, ObservableObject {
             .store(in: &cancellables)
     }
     
-    // MARK: - View Events
+    // MARK: View Events
     func viewDidLoad() {
         interactor.fetchTasks()
         interactor.loadInitialDataIfNeeded()
@@ -83,7 +85,7 @@ final class TaskMainPresenter: TaskMainPresenterProtocol, ObservableObject {
         filterAndShowTasks()
     }
         
-    // MARK: - Helpers
+    // MARK: Helpers
     /// Единственное место обновления TaskMainView
     private func filterAndShowTasks() {
         let filtered = searchText.isEmpty ? rawTasks : rawTasks.filter { task in
